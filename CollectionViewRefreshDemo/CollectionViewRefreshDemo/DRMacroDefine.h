@@ -20,5 +20,16 @@ __unused static void cleanUpBlock(__strong void(^*block)(void)) {
 
 #endif
 
+/// 手势滑动的方向
+/// eg: (up | left) 左上, (none & top) 无移动
+typedef NS_ENUM(NSUInteger, DRPanGestureDirection) {
+    DRPanGestureDirectionNone = 0,
+    DRPanGestureDirectionUp = 1 << 0,
+    DRPanGestureDirectionLeft = 1 << 1,
+    DRPanGestureDirectionDown = 1 << 2,
+    DRPanGestureDirectionRight = 1 << 3,
+};
+
+
 
 #endif /* DRMacroDefine_h */

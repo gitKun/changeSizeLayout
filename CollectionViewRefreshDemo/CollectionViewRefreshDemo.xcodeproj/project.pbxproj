@@ -18,6 +18,8 @@
 		A116D9C6234979DC0040E3B0 /* ShowInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A116D9C5234979DC0040E3B0 /* ShowInfoModel.m */; };
 		A116D9CA23497AD10040E3B0 /* ItemModelCreateUnit.m in Sources */ = {isa = PBXBuildFile; fileRef = A116D9C923497AD10040E3B0 /* ItemModelCreateUnit.m */; };
 		A1230BBC23498EC1009E4D18 /* ShowInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A1230BBA23498EC1009E4D18 /* ShowInfoCell.m */; };
+		A1ABE109235D5515009C0F39 /* FixedCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A1ABE108235D5515009C0F39 /* FixedCollectionCell.m */; };
+		A1CB3D5B235C660A00761837 /* DRCustomUnit.m in Sources */ = {isa = PBXBuildFile; fileRef = A1CB3D5A235C660A00761837 /* DRCustomUnit.m */; };
 		A1F5BAB823503CC3001176E9 /* CollectionInTableController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1F5BAB723503CC3001176E9 /* CollectionInTableController.m */; };
 		A1F5BABB23504258001176E9 /* CollectionContainerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A1F5BABA23504258001176E9 /* CollectionContainerCell.m */; };
 		A1F5BABE2350428A001176E9 /* PlaceholderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A1F5BABD2350428A001176E9 /* PlaceholderCell.m */; };
@@ -52,6 +54,10 @@
 		A1230BB923498EC1009E4D18 /* ShowInfoCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShowInfoCell.h; sourceTree = "<group>"; };
 		A1230BBA23498EC1009E4D18 /* ShowInfoCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShowInfoCell.m; sourceTree = "<group>"; };
 		A14FB7E7235321F800C36B31 /* DRMacroDefine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DRMacroDefine.h; sourceTree = "<group>"; };
+		A1ABE107235D5515009C0F39 /* FixedCollectionCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FixedCollectionCell.h; sourceTree = "<group>"; };
+		A1ABE108235D5515009C0F39 /* FixedCollectionCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FixedCollectionCell.m; sourceTree = "<group>"; };
+		A1CB3D59235C660A00761837 /* DRCustomUnit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DRCustomUnit.h; sourceTree = "<group>"; };
+		A1CB3D5A235C660A00761837 /* DRCustomUnit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DRCustomUnit.m; sourceTree = "<group>"; };
 		A1F5BAB623503CC3001176E9 /* CollectionInTableController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CollectionInTableController.h; sourceTree = "<group>"; };
 		A1F5BAB723503CC3001176E9 /* CollectionInTableController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CollectionInTableController.m; sourceTree = "<group>"; };
 		A1F5BAB923504258001176E9 /* CollectionContainerCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CollectionContainerCell.h; sourceTree = "<group>"; };
@@ -161,6 +167,8 @@
 				A116D9C823497AD10040E3B0 /* ItemModelCreateUnit.h */,
 				A116D9C923497AD10040E3B0 /* ItemModelCreateUnit.m */,
 				A116D9CB23497B440040E3B0 /* BillDetailProductInfoCellType.h */,
+				A1CB3D59235C660A00761837 /* DRCustomUnit.h */,
+				A1CB3D5A235C660A00761837 /* DRCustomUnit.m */,
 			);
 			path = Unit;
 			sourceTree = "<group>";
@@ -172,6 +180,8 @@
 				A1230BBA23498EC1009E4D18 /* ShowInfoCell.m */,
 				A1F5BAB923504258001176E9 /* CollectionContainerCell.h */,
 				A1F5BABA23504258001176E9 /* CollectionContainerCell.m */,
+				A1ABE107235D5515009C0F39 /* FixedCollectionCell.h */,
+				A1ABE108235D5515009C0F39 /* FixedCollectionCell.m */,
 				A1F5BABC2350428A001176E9 /* PlaceholderCell.h */,
 				A1F5BABD2350428A001176E9 /* PlaceholderCell.m */,
 				A1F5BAC22350C94E001176E9 /* InnerTestCollectionViewCell.h */,
@@ -309,6 +319,8 @@
 				A116D9A82347B8D40040E3B0 /* AppDelegate.m in Sources */,
 				A1F5BAC42350C94E001176E9 /* InnerTestCollectionViewCell.m in Sources */,
 				A116D9CA23497AD10040E3B0 /* ItemModelCreateUnit.m in Sources */,
+				A1ABE109235D5515009C0F39 /* FixedCollectionCell.m in Sources */,
+				A1CB3D5B235C660A00761837 /* DRCustomUnit.m in Sources */,
 				A1F5BAB823503CC3001176E9 /* CollectionInTableController.m in Sources */,
 				A116D9B92347B8D50040E3B0 /* main.m in Sources */,
 				A1F5BAC12350C3FB001176E9 /* InnerTestCollectionViewLayout.m in Sources */,

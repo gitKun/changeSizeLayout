@@ -16,6 +16,10 @@
 #import <Masonry/Masonry.h>
 
 
+#include <ctype.h>
+
+
+
 /*
  
  * 界面显示 和 数据渲染 区分开来
@@ -49,14 +53,77 @@
     
     // 模拟网络数据请求
     [self testShowNetworkInfo];
-    
 }
+
+
+
+
+#pragma mark - Test Begain
+
+
+- (BOOL)isNumberForString:(NSString *)str {
+    
+    if (!str.length) {
+        return NO;
+    }
+    
+    /*
+    // 转换为 C 字符数组
+    NSInteger length = str.length;
+    char buffer[length];
+    BOOL result = [str getCString:buffer4 maxLength:length encoding:NSUnicodeStringEncoding]; // NSASCIIStringEncoding
+    if (result) {
+        NSLog(@"buffer = %S",(const unichar*)buffer);
+    }
+   // UTF8String Property
+   const char *str2 = [str UTF8String];
+   NSLog(@"str2 = %s",str2);
+     */
+    
+    
+//    NSString *str = @"^[-+]?[0-9]+[.]+[0-9]+|[-+]?[1-9]+[0-9]*|^[0]$";
+    
+    unichar firstChar = [str characterAtIndex:0];
+    if (firstChar != '+' && firstChar != '-' && firstChar != '.' && !isdigit(firstChar)) {
+        return NO;
+    }
+    BOOL hasContentDecimalPoint = NO;
+    
+    if (firstChar == '.') {
+        hasContentDecimalPoint = YES;
+    }
+    
+    // 如果要判断 NSDecimNumber 可以转成功的位数 则需要变量 `usableCount` 保存个数(循环 return 改为 break ),循环结束判断个数不小于1则可用
+    
+    
+    for (int i = 1 ; i < str.length; i ++) {
+        unichar charactor = [str characterAtIndex:i];
+        if (!isdigit(charactor)) {
+            if (!hasContentDecimalPoint && charactor == '.') {
+                hasContentDecimalPoint = YES;
+            } else {
+                return NO;
+            }
+        }
+    }
+    return YES;
+}
+
+
+
+
+#pragma mark - Test End
+
+
+
+
+
 
 - (void)testShowNetworkInfo {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(8.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         // TODO: 给model赋值比给创建model的时间更久(10倍) 所以要将赋值代码在其他线程执行
         CFAbsoluteTime refTime = CFAbsoluteTimeGetCurrent();
-        NSLog(@"赋值循环开始: start time 0.000000");
+        //NSLog(@"赋值循环开始: start time 0.000000");
         for (NSArray *list in self.dataSouce) {
             NSInteger count = list.count;
             @autoreleasepool {
@@ -67,7 +134,7 @@
                 }
             }
         }
-        NSLog(@"赋值循环开始: after busy %f", CFAbsoluteTimeGetCurrent() - refTime);
+        //NSLog(@"赋值循环开始: after busy %f", CFAbsoluteTimeGetCurrent() - refTime);
         // TODO: 赋值结束后通知主线程刷新数据
         [self.collectionView reloadData];
     });

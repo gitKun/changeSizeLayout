@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DRCustomUnit.h"
 
 @class ShowInfoModel;
 @class ShowInfoCell;
@@ -19,15 +20,35 @@
  */
 
 
+
+//@protocol ShowInfoCellGestureDelegate <NSObject>
+//
+//
+//@end
+
+
+
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ShowInfoCell : UICollectionViewCell
+
+
++ (NSString *)reuseID;
+
+
+@property (nonatomic, strong, readonly, nonnull) UIView *drMaskView;
 
 
 @property (nonatomic, copy) BOOL(^showInfoCellShouldBegainEdit)(ShowInfoCell *sCell, UITextField *textField);
 @property (nonatomic, copy) void(^showInfoCellDidBegainEdit)(ShowInfoCell *sCell, UITextField *textField);
 @property (nonatomic, copy) void(^showInfoCellDidChangeTextInfo)(ShowInfoCell *sCell, UITextField *textField, NSString *resultText);
 @property (nonatomic, copy) void(^showInfoCellDidEndEdit)(ShowInfoCell *sCell, UITextField *textField);
+
+
+
+//@property (nonatomic, weak, nullable) id<ShowInfoCellGestureDelegate>gestureDelegate;
+
 
 
 - (void)updateInfoWithModel:(ShowInfoModel *)model;

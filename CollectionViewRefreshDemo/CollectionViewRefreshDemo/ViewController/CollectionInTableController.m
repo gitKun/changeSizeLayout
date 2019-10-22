@@ -47,7 +47,7 @@
 }
 
 - (void)initUIElement {
-    
+    self.title = @"联合滚动";
     self.view.backgroundColor = [UIColor colorWithRed:(arc4random()%255 / 255.0) green:(arc4random()%255 / 255.0) blue:(arc4random()%255 / 255.0) alpha:1];
     
     [self.view addSubview:self.mainTableView];
@@ -63,11 +63,11 @@
 #pragma mark - SSSSSSS
 
 - (void)collectionContainerCell:(CollectionContainerCell *)cCell changeScrollEnable:(BOOL)enabel {
-    if (enabel) {
-        self.mainTableView.scrollEnabled = NO;
-    } else {
-        self.mainTableView.scrollEnabled = YES;
-    }
+//    if (enabel) {
+//        self.mainTableView.scrollEnabled = NO;
+//    } else {
+//        self.mainTableView.scrollEnabled = YES;
+//    }
 }
 
 
@@ -87,15 +87,13 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 5;
+    return 100;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     switch (indexPath.row) {
         case 0:
-        case 1:
-        case 3:
-        case 4:
+        case 80:
         {
             PlaceholderCell *cell = [tableView dequeueReusableCellWithIdentifier:[PlaceholderCell reuseID] forIndexPath:indexPath];
             if (!cell) {
@@ -103,7 +101,7 @@
             }
             return cell;
         }
-        case 2:
+        default:
         {
             CollectionContainerCell *cell = [tableView dequeueReusableCellWithIdentifier:[CollectionContainerCell reuseID] forIndexPath:indexPath];
             if (!cell) {
@@ -113,8 +111,8 @@
             cell.vcView = self.view;
             self.contentCell = cell;
             return cell;
+            
         }
-        default:
             break;
     }
     return nil;
@@ -123,18 +121,12 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     switch (indexPath.row) {
           case 0:
-          case 1:
-          case 3:
-          case 4:
+        case 80:
           {
               return 250;
           }
-          case 2:
-          {
-              return CGRectGetHeight(tableView.bounds) + 10;
-          }
           default:
-              return 100;
+              return 40;
       }
 }
 
@@ -149,6 +141,7 @@
         [_mainTableView registerClass:[CollectionContainerCell class] forCellReuseIdentifier:[CollectionContainerCell reuseID]];
         _mainTableView.dataSource = self;
         _mainTableView.delegate = self;
+        _mainTableView.directionalLockEnabled = YES;
     }
     return _mainTableView;
 }

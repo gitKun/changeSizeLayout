@@ -8,19 +8,25 @@
 
 #import "CollectionContainerCell.h"
 
-#import "InnerTestCollectionViewLayout.h"
-#import "InnerTestCollectionViewCell.h"
+#import "ChangeFrameLayout.h"
+#import "ShowInfoCell.h"
+#import "FixedCollectionCell.h"
+//#import "InnerTestCollectionViewLayout.h"
+//#import "InnerTestCollectionViewCell.h"
+#import "ShowInfoModel.h"
 
 #import <Masonry/Masonry.h>
+#import "DRCustomUnit.h"
 
-@interface CollectionContainerCell ()<UICollectionViewDelegate, UICollectionViewDataSource>
+
+@interface CollectionContainerCell ()<UICollectionViewDelegate, UICollectionViewDataSource, ChangeFrameLayoutDelegate, FixedCollectionCellSwipeDelegate>
 
 @property (nonatomic, strong, readwrite) UICollectionView *cellCollectionView;
 
 
-
 @property (nonatomic, assign) BOOL topScrollEnd;
 @property (nonatomic, assign) BOOL bottomScrollEnd;
+
 
 @end
 
@@ -43,6 +49,8 @@
         [self initUIElement];
         
         self.topScrollEnd = YES;
+        
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     return self;
 }
@@ -56,7 +64,7 @@
     [self.cellCollectionView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.bottom.right.equalTo(self.contentView);
     }];
-    self.cellCollectionView.scrollEnabled = NO;
+//    self.cellCollectionView.scrollEnabled = NO;
 }
 
 
@@ -69,131 +77,94 @@
 
 - (void)mainTableViewContentOffsetChange:(CGFloat)offsetY {
     
-    
-    CGRect selfRect = [self.contentView convertRect:self.cellCollectionView.frame toView:self.vcView];
-    
-    
-    
-    CGRect showingRect =CGRectMake(CGRectGetMinX(self.vcView.frame), CGRectGetMinY(self.vcView.frame) - 5, CGRectGetWidth(self.vcView.frame), CGRectGetHeight(self.vcView.frame) + 6);
-    
-    if (!CGRectContainsRect(showingRect, selfRect)) {
-        if (self.cellCollectionView.scrollEnabled) {
-            self.cellCollectionView.scrollEnabled = NO;
-            if (self.delegate) {
-                [self.delegate collectionContainerCell:self changeScrollEnable:NO];
+}
+
+
+#pragma mark - FixedCollectionCellSwipeDelegate
+
+- (void)fixedCollectionCell:(FixedCollectionCell *)fCell didStartSwipeWithDirection:(UISwipeGestureRecognizerDirection)direction {
+    switch (direction) {
+        case UISwipeGestureRecognizerDirectionLeft:
+        {
+            CGRect frame = self.frame;
+            if (frame.origin.x > 100) {
+                frame.origin.x = 0;
+                [UIView animateWithDuration:0.25 animations:^{
+                    self.frame = frame;
+                }];
             }
         }
-    
-        return;
-    } else {
-        
-        if (!self.bottomScrollEnd || !self.topScrollEnd) {
-            if (!self.cellCollectionView.scrollEnabled) {
-                self.cellCollectionView.scrollEnabled = YES;
-                if (self.delegate) {
-                    [self.delegate collectionContainerCell:self changeScrollEnable:YES];
-                }
+            break;
+        case UISwipeGestureRecognizerDirectionRight:
+        {
+            CGRect frame = self.frame;
+            if (frame.origin.x < 10) {
+                frame.origin.x = 180;
+                [UIView animateWithDuration:0.25 animations:^{
+                    self.frame = frame;
+                }];
             }
         }
-        
-        return;
-    }
-    
-    CGRect topBoundsRect = CGRectMake(0, CGRectGetMinY(selfRect) + 1, CGRectGetWidth(selfRect), 1);
-    CGRect bottomBoundsRect = CGRectMake(0, CGRectGetMaxY(selfRect) - 1, CGRectGetWidth(selfRect), 1);
-    
-    BOOL showingTop = CGRectContainsRect(self.vcView.bounds, topBoundsRect);
-    BOOL showingBottom = CGRectContainsRect(self.vcView.bounds, bottomBoundsRect);
-    
-    if (showingTop && !showingBottom) {
-        // 外部滚动时 内部必定不能滚动
-        if (!self.topScrollEnd) {
-            if (!self.cellCollectionView.scrollEnabled) {
-                self.cellCollectionView.scrollEnabled = YES;
-                if (self.delegate) {
-                    [self.delegate collectionContainerCell:self changeScrollEnable:YES];
-                }
-            }
-        }
-        
-    } else if (showingBottom && !showingTop) {
-        if (!self.bottomScrollEnd) {
-            if (!self.cellCollectionView.scrollEnabled) {
-                self.cellCollectionView.scrollEnabled = YES;
-                if (self.delegate) {
-                    [self.delegate collectionContainerCell:self changeScrollEnable:YES];
-                }
-            }
-        }
+            break;
+        default:
+            break;
     }
 }
 
 
 
-
-//- (void)changeScrollEnable {
-//    if (self.cellCollectionView.scrollEnabled) {
-//        self.cellCollectionView.scrollEnabled = NO;
-//        if (self.delegate) {
-//            [self.delegate collectionContainerCell:self changeScrollEnable:NO];
-//        }
-//    } else if (!self.cellCollectionView.scrollEnabled) {
-//        self.cellCollectionView.scrollEnabled = YES;
-//        if (self.delegate) {
-//            [self.delegate collectionContainerCell:self changeScrollEnable:YES];
-//        }
-//    }
-//}
-
-#pragma mark -
+#pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (scrollView == self.cellCollectionView) {
-        CGFloat offsetY = scrollView.contentOffset.y;
-        CGFloat contentHeight = scrollView.contentSize.height;
-        CGFloat height = CGRectGetHeight(scrollView.bounds);
-        
-        if (offsetY <= 0.01) {
-            if (scrollView.scrollEnabled) {
-                scrollView.scrollEnabled = NO;
-                self.topScrollEnd = YES;
-                if (self.delegate) {
-                    [self.delegate collectionContainerCell:self changeScrollEnable:NO];
-                }
-            }
-        } else {
-            self.topScrollEnd = NO;
-        }
-        
-        if (offsetY + height >= contentHeight - 0.01) {
-            if (scrollView.scrollEnabled) {
-                scrollView.scrollEnabled = NO;
-                self.bottomScrollEnd = YES;
-                if (self.delegate) {
-                    [self.delegate collectionContainerCell:self changeScrollEnable:NO];
-                }
-            }
-        } else {
-            self.bottomScrollEnd = NO;
-        }
-        
-    }
+
 }
 
 
 #pragma mark - UICollectionViewDelegate && UICollectionViewDataSource
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 400;
+    return 16;
 }
 
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+    return 1;
+}
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    InnerTestCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[InnerTestCollectionViewCell reuseID] forIndexPath:indexPath];
-    if (!cell) {
-        
+    if (indexPath.row == 0) {
+        FixedCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[FixedCollectionCell reuseID] forIndexPath:indexPath];
+        cell.swipeDelegate = self;
+        return cell;
     }
+    ShowInfoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[ShowInfoCell reuseID] forIndexPath:indexPath];
+    //cell.gestureDelegate = self;
     return cell;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    if ([cell isKindOfClass:[ShowInfoCell class]]) {
+        ShowInfoCell *sCell = (ShowInfoCell *)cell;
+        [sCell updateInfoWithModel:({
+            ShowInfoModel *model = [[ShowInfoModel alloc] init];
+            model.inputString = [NSString stringWithFormat:@"cell %@",@(indexPath.row + 1)];
+            model.showDataStatus = NO;
+            model;
+        })];
+    }
+}
+
+#pragma mark - change
+
+- (CGSize)changeFrameLayout:(ChangeFrameLayout *)layout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.row == 0) {
+        return CGSizeMake(220, 40);
+    } else {
+        return CGSizeMake(80, 40);
+    }
+}
+
+- (BOOL)changeFrameLayoutShouldFixedFirstColumnItem:(ChangeFrameLayout *)layout {
+    return YES;
 }
 
 
@@ -201,13 +172,17 @@
 
 - (UICollectionView *)cellCollectionView {
     if (!_cellCollectionView) {
-        InnerTestCollectionViewLayout *layout = [[InnerTestCollectionViewLayout alloc] init];
+//        InnerTestCollectionViewLayout *layout = [[InnerTestCollectionViewLayout alloc] init];
+        ChangeFrameLayout *layout = [[ChangeFrameLayout alloc] init];
+        layout.delegate = self;
         _cellCollectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
         _cellCollectionView.backgroundColor = [UIColor whiteColor];
-        [_cellCollectionView registerClass:[InnerTestCollectionViewCell class] forCellWithReuseIdentifier:[InnerTestCollectionViewCell reuseID]];
+        [_cellCollectionView registerClass:[ShowInfoCell class] forCellWithReuseIdentifier:[ShowInfoCell reuseID]];
+        [_cellCollectionView registerClass:[FixedCollectionCell class] forCellWithReuseIdentifier:[FixedCollectionCell reuseID]];
         _cellCollectionView.dataSource = self;
         _cellCollectionView.delegate = self;
         _cellCollectionView.bounces = NO;
+//        _cellCollectionView.panGestureRecognizer.delaysTouchesBegan = YES;
     }
     return _cellCollectionView;
 }

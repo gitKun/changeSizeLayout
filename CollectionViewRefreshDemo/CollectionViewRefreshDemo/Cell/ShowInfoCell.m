@@ -9,9 +9,9 @@
 #import "ShowInfoCell.h"
 #import "ShowInfoModel.h"
 #import <Masonry/Masonry.h>
-#import "DRMacroDefine.h"
+#import "DRCustomUnit.h"
 
-@interface ShowInfoCell ()<UITextFieldDelegate>
+@interface ShowInfoCell ()<UITextFieldDelegate, UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) UILabel *infoLabel;
 
@@ -19,7 +19,7 @@
 
 /// 在没有数据状态下呈现为灰色(0X000000A9)并且拦截点击事件
 /// 在有数据状态下为透明色(clearColor) 拦截事件后通知到对应的 cell 子视图
-@property (nonatomic, strong) UIControl *drMaskView;
+@property (nonatomic, strong) UIView *drMaskView;
 
 @property (nonatomic, assign) BOOL noDataStatus;
 
@@ -30,6 +30,12 @@
 
 
 @implementation ShowInfoCell
+
+
++ (NSString *)reuseID {
+    return @"ShowInfoCellID";
+}
+
 
 - (void)awakeFromNib {
     [super awakeFromNib];
@@ -123,7 +129,7 @@
 
 #pragma mark - UI Action
 
-- (void)drMaskViewClicked:(UIControl *)control {
+- (void)drMaskViewClicked:(UITapGestureRecognizer *)tapG {
     if (self.noDataStatus) {
         NSLog(@"等待数据填充!");
         return;
@@ -135,6 +141,7 @@
     // 即使手动调用成为第一响应者如果代理返回NO,让然不会弹出键盘样式
     [self.textField becomeFirstResponder];
 }
+
 
 #pragma mark - UITextFieldDelegate
 
@@ -187,7 +194,6 @@
 }
 
 
-
 #pragma mark - getter
 
 - (CAShapeLayer *)borderLayer {
@@ -198,11 +204,13 @@
     return _borderLayer;
 }
 
-- (UIControl *)drMaskView {
+- (UIView *)drMaskView {
     if (!_drMaskView) {
-        _drMaskView = [[UIControl alloc] initWithFrame:CGRectZero];
+        _drMaskView = [[UIView alloc] initWithFrame:CGRectZero];
+        // FIXME: 好看的渐变色? `https://github.com/Gradients/Gradients`
         _drMaskView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.75];
-        [_drMaskView addTarget:self action:@selector(drMaskViewClicked:) forControlEvents:UIControlEventTouchUpInside];
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(drMaskViewClicked:)];
+        [_drMaskView addGestureRecognizer:tap];
     }
     return _drMaskView;
 }
