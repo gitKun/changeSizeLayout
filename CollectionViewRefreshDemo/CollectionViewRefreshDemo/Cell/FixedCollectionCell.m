@@ -91,7 +91,13 @@
         return YES;
     }
     
-    if (![otherGestureRecognizer.view isKindOfClass:[UICollectionView class]]) {
+    if ([otherGestureRecognizer.view isKindOfClass:[UITableView class]]) {
+        UITableView *tab = (UITableView *)[otherGestureRecognizer view];
+        CGPoint vel = [tab.panGestureRecognizer velocityInView:tab];
+        DRPanGestureDirection tabPanDirection = [DRCustomUnit gestureDirectionFromCommitTranslation:vel ignoreDirectionLength:10];
+        if (tabPanDirection & DRPanGestureDirectionLeft || tabPanDirection & DRPanGestureDirectionRight) {
+            return NO;
+        }
         return YES;
     }
     
